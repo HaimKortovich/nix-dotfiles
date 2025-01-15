@@ -8,6 +8,7 @@
     ./features/fish.nix
     ./features/ghostty.nix
     ./features/spicetify.nix
+    ./features/hyprland.nix
   ];
 
   nixpkgs = {

@@ -7,15 +7,10 @@
     ./features/stylix.nix
     ./features/fish.nix
     ./features/ghostty.nix
+    ./features/spicetify.nix
   ];
 
   nixpkgs = {
-    # overlays = [
-    #   inputs.self.overlays.additions
-    #   inputs.self.overlays.stable-packages
-    #   inputs.self.overlays.rosetta-packages
-    #   inputs.self.overlays.modifications
-    # ];
     config = {
       allowUnfree = true;
       allowUnfreePredicate = _: true;

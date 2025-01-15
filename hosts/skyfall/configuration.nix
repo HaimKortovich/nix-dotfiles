@@ -130,6 +130,12 @@
   # };
 
   # List services that you want to enable:
+  services.hardware.openrgb = {
+    enable = true;
+    motherboard = "amd";
+    server.port = 5700;
+    package = pkgs.openrgb-with-all-plugins;
+  };
 
   # Enable the OpenSSH daemon.
   # services.openssh = {

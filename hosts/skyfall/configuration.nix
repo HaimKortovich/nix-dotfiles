@@ -5,6 +5,7 @@
 {
   pkgs,
   inputs,
+  config,
   ...
 }:
 
@@ -38,7 +39,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "skyfall"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -51,12 +52,27 @@
   # Set your time zone.
   time.timeZone = "America/Panama";
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+  hardware.opengl = {
+    driSupport32Bit = true; # For 32 bit applications
+  };
+  hardware.graphics.extraPackages = with pkgs; [ rocmPackages.clr.icd amdvlk ];
+  hardware.graphics.extraPackages32 = with pkgs; [
+    driversi686Linux.amdvlk
+  ];
+
+  systemd.packages = with pkgs; [ lact ];
+  systemd.services.lactd.wantedBy = ["multi-user.target"];
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
-
+  programs.hyprland.enable = true;
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
@@ -119,6 +135,8 @@
   environment.systemPackages = [
      pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      pkgs.git
+     pkgs.openrgb-with-all-plugins
+     pkgs.lact
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -133,9 +151,20 @@
   services.hardware.openrgb = {
     enable = true;
     motherboard = "amd";
-    server.port = 5700;
-    package = pkgs.openrgb-with-all-plugins;
   };
+
+  hardware.i2c.enable = true;
+
+  services.udev.packages = [ pkgs.dolphin-emu ];
+  
+  boot.extraModulePackages = [ 
+    config.boot.kernelPackages.gcadapter-oc-kmod
+  ];
+
+  # to autoload at boot:
+  boot.kernelModules = [ 
+    "gcadapter_oc"
+  ];
 
   # Enable the OpenSSH daemon.
   # services.openssh = {

@@ -66,7 +66,6 @@ in
           nil_ls.enable = true; 
           gopls.enable = true;
           yamlls.enable = true;
-          tsserver.enable = true;
           gleam.enable = true;
         };
       };

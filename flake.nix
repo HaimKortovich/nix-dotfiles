@@ -7,7 +7,7 @@
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     # Home manager
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # nix-darwin
@@ -15,11 +15,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     hardware.url = "github:nixos/nixos-hardware";
-    # Editors
-    ## NixVim
-    # If you are not running an unstable channel of nixpkgs, select the corresponding branch of nixvim.
-    # url = "github:nix-community/nixvim/nixos-23.05";
-    nixvim.url = "github:nix-community/nixvim";
+    nixvim.url = "github:nix-community/nixvim/nixos-24.11";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs = {
       url = "github:marienz/nix-doom-emacs-unstraightened";
@@ -27,6 +23,8 @@
     };
     # Fix .app programs installed by Nix on Mac
     mac-app-util.url = "github:hraban/mac-app-util";
+    slippi.url = "github:lytedev/slippi-nix";
+    stylix.url = "github:danth/stylix/release-24.11";
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,7 +69,7 @@
       homeManagerModules = import ./modules/home-manager;
 
       templates = import ./templates;
-
+      
       nixosConfigurations = {
         skyfall = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";

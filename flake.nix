@@ -80,17 +80,17 @@
         };
       };
       # macOS systems using nix-darwin
-      # darwinConfigurations = {
-      #   TAG-761 = darwin.lib.darwinSystem {
-      #     system = "aarch64-darwin";
-      #     specialArgs = {
-      #       inherit inputs;
-      #     };
-      #     modules = [
-      #       ./hosts/tag-761.nix
-      #     ];
-      #   };
-      # };
+      darwinConfigurations = {
+        TAG-761 = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            ./hosts/darwin/configuration.nix
+          ];
+        };
+      };
 
       homeConfigurations = {
         "haimkortovich@TAG-761" = home-manager.lib.homeManagerConfiguration {

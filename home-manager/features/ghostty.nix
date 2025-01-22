@@ -1,10 +1,13 @@
-{ pkgs, inputs, ... }:
-
+{ pkgs, inputs, lib, ... }:
+let
+  ghostty-mock = pkgs.writeShellScriptBin "gostty-mock" ''
+    true
+    '';
+in
 {
-  imports = [ inputs.ghostty.homeModules.default ];
   programs.ghostty = {
     enable = true;
-    shellIntegration.enable = true;
+    package = if (pkgs.stdenv.isDarwin) then ghostty-mock else pkgs.gostty;
     settings = {
       shell-integration = "fish";
       command = "${pkgs.fish}/bin/fish --login --interactive";

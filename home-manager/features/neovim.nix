@@ -33,7 +33,7 @@ in
     plugins = {
       lualine.enable = true;
       comment-nvim = {
-	enable = true;
+        enable = true;
       };
       which-key = {
         enable = true;

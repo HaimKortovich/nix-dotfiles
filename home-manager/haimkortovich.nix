@@ -38,7 +38,14 @@
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    userName  = "Haim Kortovich";
+    userEmail = "haim.kortovich@topmanage.com";
+    extraConfig = {
+      url."ssh://git@bitbucket.org/".insteadOf = "https://bitbucket.org/";
+    };
+  };
 
   xdg.enable = true;
 

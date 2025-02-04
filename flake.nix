@@ -7,26 +7,43 @@
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-24.11";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
     # nix-darwin
-    darwin.url = "github:LnL7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    # Fix .app programs installed by Nix on Mac
+    mac-app-util.url = "github:hraban/mac-app-util";
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixpkgs-firefox-darwin = {
+      url = "github:bandithedoge/nixpkgs-firefox-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    hardware.url = "github:nixos/nixos-hardware";
-    nixvim.url = "github:nix-community/nixvim/nixos-24.11";
-    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-doom-emacs = {
       url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "";
     };
-    # Fix .app programs installed by Nix on Mac
-    mac-app-util.url = "github:hraban/mac-app-util";
     slippi.url = "github:lytedev/slippi-nix";
-    stylix.url = "github:danth/stylix/release-24.11";
+    stylix.url = "github:danth/stylix";
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -35,8 +52,10 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       darwin,
+      lix-module,
       ...
     }@inputs:
     let
@@ -69,14 +88,17 @@
       homeManagerModules = import ./modules/home-manager;
 
       templates = import ./templates;
-      
+
       nixosConfigurations = {
         skyfall = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
+          system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
           };
-          modules = [ ./hosts/skyfall/configuration.nix ];
+          modules = [
+            lix-module.nixosModules.default
+            ./hosts/skyfall/configuration.nix
+          ];
         };
       };
       # macOS systems using nix-darwin
@@ -87,6 +109,7 @@
             inherit inputs;
           };
           modules = [
+            lix-module.nixosModules.default
             ./hosts/darwin/configuration.nix
           ];
         };
@@ -94,12 +117,13 @@
 
       homeConfigurations = {
         "haimkortovich@TAG-761" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.aarch64-darwin; # Home-manager requires 'pkgs' instance
+          pkgs = nixpkgs-unstable.legacyPackages.aarch64-darwin;
           extraSpecialArgs = {
             inherit inputs;
           };
           modules = [ ./home-manager/haimkortovich.nix ];
         };
+
         "bond@skyfall" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = {
@@ -108,5 +132,15 @@
           modules = [ ./home-manager/bond.nix ];
         };
       };
+
+      devShell = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.mkShell {
+          buildInputs = [ self.outputs.formatter.${system} ];
+        }
+      );
     };
 }

@@ -1,19 +1,21 @@
 { pkgs, inputs, ... }:
 
 let
-    key = k: a: {
-      key = k;
-      action = "<cmd>${a}<CR>";
-      mode = [ "n" "v" ];
-    };
-    keyI = k: a: {
-      key = k;
-      action = "<cmd>${a}<CR>";
-      mode = [ "i" ];
-    };
+  key = k: a: {
+    key = k;
+    action = "<cmd>${a}<CR>";
+    mode = [
+      "n"
+      "v"
+    ];
+  };
+  keyI = k: a: {
+    key = k;
+    action = "<cmd>${a}<CR>";
+    mode = [ "i" ];
+  };
 in
 {
-
   imports = [ inputs.nixvim.homeManagerModules.nixvim ];
   programs.nixvim = {
     enable = true;
@@ -28,19 +30,22 @@ in
       (key "<leader>w" "<C-w>")
       (key "<leader>gg" "Neogit")
       (key "<C-s>" "w")
-      (keyI "<C-s>" "w") 
+      (keyI "<C-s>" "w")
     ];
     plugins = {
+      web-devicons.enable = true;
       lualine.enable = true;
-      comment-nvim = {
+      comment = {
         enable = true;
       };
       which-key = {
         enable = true;
-        icons = {
+        settings = {
+          icons = {
             separator = "";
             group = "";
           };
+        };
       };
       neogit = {
         enable = true;
@@ -63,7 +68,7 @@ in
       lsp = {
         enable = true;
         servers = {
-          nil_ls.enable = true; 
+          nil_ls.enable = true;
           gopls.enable = true;
           yamlls.enable = true;
           gleam.enable = true;
@@ -75,23 +80,23 @@ in
       };
       telescope = {
         enable = true;
-	 extensions = {
-	    frecency.enable = true;
-	    fzf-native.enable = true;
-	 };
-          defaults = {
-            mappings = {
-              i = {
-                "<esc>" = {
-                  __raw = ''
-                    function(...)
-                      return require("telescope.actions").close(...)
-                    end
-                  '';
-                };
+        extensions = {
+          frecency.enable = true;
+          fzf-native.enable = true;
+        };
+        settings.defaults = {
+          mappings = {
+            i = {
+              "<esc>" = {
+                __raw = ''
+                  function(...)
+                    return require("telescope.actions").close(...)
+                  end
+                '';
               };
             };
           };
+        };
       };
     };
   };

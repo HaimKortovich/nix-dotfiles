@@ -91,6 +91,8 @@
     };
   };
 
+  fonts.packages = [ pkgs.nerd-fonts.hack pkgs.noto-fonts-emoji ];
+
   homebrew = {
     enable = true;
     global.brewfile = true;

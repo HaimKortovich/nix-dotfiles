@@ -17,10 +17,12 @@
     ./features/ghostty.nix
     ./features/spicetify.nix
     ./features/neovim.nix
+    ./features/firefox.nix
   ];
 
   nixpkgs = {
     # You can add overlays here
+    overlays = [ inputs.nixpkgs-firefox-darwin.overlay ];
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
@@ -40,7 +42,7 @@
   programs.home-manager.enable = true;
   programs.git = {
     enable = true;
-    userName  = "Haim Kortovich";
+    userName = "Haim Kortovich";
     userEmail = "haim.kortovich@topmanage.com";
     extraConfig = {
       url."ssh://git@bitbucket.org/".insteadOf = "https://bitbucket.org/";
@@ -51,5 +53,5 @@
 
   home.sessionPath = [ "$HOME/.local/bin" ];
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
 }

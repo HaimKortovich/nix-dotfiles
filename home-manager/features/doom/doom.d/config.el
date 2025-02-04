@@ -37,20 +37,7 @@
                                         ; Run `helm_ls serve` for helm-mode buffers
   (add-to-list 'eglot-server-programs '(helmls-mode "helm_ls" "serve")))
 
-(setq jiralib-url "https://jira-software-topmanage.atlassian.net")
 (setq auth-source-debug t)
-
-(use-package kubernetes
-  :defer
-  :commands (kubernetes-overview))
-
-(use-package kubernetes-evil
-  :defer
-  :after kubernetes)
-
-(map! :leader
-      (:prefix "o"
-       :desc "Kubernetes" "K" 'kubernetes-overview))
 
 ;; WEB MODE
 (use-package web-mode
@@ -88,41 +75,6 @@
 (with-eval-after-load 'org
   (setq org-directory "~/org"))
 
-;; ----------------------------------- SPOTIFY ------------------------------------------------
-(use-package! smudge
-  :bind-keymap ("C-c ." . smudge-command-map)
-  :custom
-  (smudge-oauth2-client-secret (+pass-get-secret "spotify/smudge/client-secret"))
-  (smudge-oauth2-client-id (+pass-get-secret "spotify/smudge/client-id"))
-  ;; optional: enable transient map for frequent commands
-  (smudge-player-use-transient-map t))
-;; ----------------------------------- SLACK ------------------------------------------------
-(use-package slack
-  :commands (slack-start)
-  :init
-  (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
-  (setq slack-prefer-current-team t)
-  :config
-  (slack-register-team
-   :default t
-   :name "topmanage"
-   :token (+pass-get-secret "slack/topmanage/token")
-   :cookie (+pass-get-secret "slack/topmanage/cookie")
-   :full-and-display-names t)
-
-  (evil-define-key 'normal slack-mode-map
-    ",ra" 'slack-message-add-reaction
-    ",rr" 'slack-message-remove-reaction
-    ",rs" 'slack-message-show-reaction-users
-    ",me" 'slack-message-edit
-    ",md" 'slack-message-delete
-    ",mu" 'slack-message-embed-mention
-    ",mc" 'slack-message-embed-channel)
-
-  (evil-define-key 'normal slack-edit-message-mode-map
-    ",k" 'slack-message-cancel-edit
-    ",mu" 'slack-message-embed-mention
-    ",mc" 'slack-message-embed-channel))
 
 (add-hook! 'slack-mode-hook 'variable-pitch-mode)
 
@@ -133,18 +85,6 @@
   :commands (alert)
   :custom (alert-default-style 'notifier))
 
-;; Custom function from @noonker
-;; src: https://github.com/noonker/doom-emacs/blob/main/config.org#slack-1
-(defun +slack/slk ()
-  "start slack"
-  (interactive)
-  (slack-start)
-  (cl-defmethod slack-buffer-name ((_class (subclass slack-room-buffer))
-                                   room team)
-    (slack-if-let* ((room-name (slack-room-name room team)))
-        (format  ":%s"
-                 room-name)))
-  (slack-change-current-team))
 
 ;; -----------------------------------    ASCII BANNER ---------------------------------------
 

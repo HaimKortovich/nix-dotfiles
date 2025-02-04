@@ -59,13 +59,16 @@
   hardware.opengl = {
     driSupport32Bit = true; # For 32 bit applications
   };
-  hardware.graphics.extraPackages = with pkgs; [ rocmPackages.clr.icd amdvlk ];
+  hardware.graphics.extraPackages = with pkgs; [
+    rocmPackages.clr.icd
+    amdvlk
+  ];
   hardware.graphics.extraPackages32 = with pkgs; [
     driversi686Linux.amdvlk
   ];
 
   systemd.packages = with pkgs; [ lact ];
-  systemd.services.lactd.wantedBy = ["multi-user.target"];
+  systemd.services.lactd.wantedBy = [ "multi-user.target" ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -133,10 +136,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = [
-     pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-     pkgs.git
-     pkgs.openrgb-with-all-plugins
-     pkgs.lact
+    pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    pkgs.git
+    pkgs.openrgb-with-all-plugins
+    pkgs.lact
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -156,14 +159,19 @@
   hardware.i2c.enable = true;
 
   services.udev.packages = [ pkgs.dolphin-emu ];
-  
-  boot.extraModulePackages = [ 
+
+  boot.extraModulePackages = [
     config.boot.kernelPackages.gcadapter-oc-kmod
   ];
 
   # to autoload at boot:
-  boot.kernelModules = [ 
+  boot.kernelModules = [
     "gcadapter_oc"
+  ];
+
+  fonts.packages = [
+    pkgs.nerd-fonts.hack
+    pkgs.noto-fonts-emoji
   ];
 
   # Enable the OpenSSH daemon.
@@ -172,7 +180,6 @@
   #   settings.PermitRootLogin = "no";
   #   settings.PasswordAuthentication = false;
   # };
-
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

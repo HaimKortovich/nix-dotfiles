@@ -68,6 +68,7 @@ in
       lsp = {
         enable = true;
         servers = {
+          typst_lsp.package = null;
           nil_ls.enable = true;
           gopls.enable = true;
           yamlls.enable = true;

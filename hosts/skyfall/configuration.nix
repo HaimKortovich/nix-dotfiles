@@ -32,7 +32,6 @@
       experimental-features = "nix-command flakes";
       auto-optimise-store = true;
     };
-    package = pkgs.nixVersions.nix_2_23;
   };
 
   # Bootloader.
@@ -76,8 +75,9 @@
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
   programs.hyprland.enable = true;
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.displayManager.sddm.theme = "where_is_my_sddm_theme";
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
@@ -124,8 +124,8 @@
   };
 
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "bond";
+  # services.xserver.displayManager.autoLogin.enable = true;
+  # services.xserver.displayManager.autoLogin.user = "bond";
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -174,6 +174,13 @@
     pkgs.noto-fonts-emoji
   ];
 
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+    enable = true;
+    setSocketVariable = true;
+    };
+  };
   # Enable the OpenSSH daemon.
   # services.openssh = {
   #   enable = true;
@@ -193,6 +200,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
 }

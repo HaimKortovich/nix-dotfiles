@@ -80,10 +80,6 @@ in
     shellInit = ''
       set -Ux EDITOR ${pkgs.neovim}/bin/nvim
     '';
-
-    shellInitLast = ''
-      ${lib.optionalString config.programs.starship.enable "enable_transience"}
-    '';
   };
 
   # In fish, the contents of .config/fish/conf.d (e.g. plugins) get executed BEFORE config.fish

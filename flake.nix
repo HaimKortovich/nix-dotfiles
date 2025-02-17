@@ -3,19 +3,17 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     # Home manager
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
     # nix-darwin
     darwin = {
       url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # Fix .app programs installed by Nix on Mac
     mac-app-util.url = "github:hraban/mac-app-util";
@@ -29,7 +27,7 @@
     };
 
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-24.11";
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-doom-emacs = {
@@ -38,6 +36,7 @@
     };
     slippi.url = "github:lytedev/slippi-nix";
     stylix.url = "github:danth/stylix";
+
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,7 +51,6 @@
     {
       self,
       nixpkgs,
-      nixpkgs-unstable,
       home-manager,
       darwin,
       lix-module,
@@ -117,7 +115,7 @@
 
       homeConfigurations = {
         "haimkortovich@TAG-761" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs-unstable.legacyPackages.aarch64-darwin;
+          pkgs = nixpkgs.legacyPackages.aarch64-darwin;
           extraSpecialArgs = {
             inherit inputs;
           };

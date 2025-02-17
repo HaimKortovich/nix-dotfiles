@@ -12,7 +12,7 @@ in
 {
   programs.ghostty = {
     enable = true;
-    package = if (pkgs.stdenv.isDarwin) then ghostty-mock else pkgs.gostty;
+    package = if (pkgs.stdenv.isDarwin) then ghostty-mock else pkgs.ghostty;
     settings = {
       shell-integration = "fish";
       command = "${pkgs.fish}/bin/fish --login --interactive";

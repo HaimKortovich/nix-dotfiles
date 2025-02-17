@@ -13,7 +13,7 @@
   ];
   programs.doom-emacs = {
     enable = true;
-    emacs = pkgs.emacs29-pgtk.overrideAttrs (old: {
+    emacs = if (pkgs.stdenv.isDarwin) then pkgs.emacs29-pgtk.overrideAttrs (old: {
       patches = (old.patches or [ ]) ++ [
         # Fix OS window role (needed for window managers like yabai)
         (pkgs.fetchpatch {
@@ -31,7 +31,7 @@
           sha256 = "sha256-oM6fXdXCWVcBnNrzXmF0ZMdp8j0pzkLE66WteeCutv8=";
         })
       ];
-    });
+    }) else pkgs.emacs30-pgtk;
     doomDir = ./doom.d; # Directory containing your config.el, init.el
   };
 }

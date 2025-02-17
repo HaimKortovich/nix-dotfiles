@@ -1,5 +1,5 @@
 (setq doom-theme 'doom-gruvbox
-      doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 12 :weight 'semi-bold))
+      doom-font (font-spec :family "Hack Nerd Font Mono" :size 12 :weight 'semi-bold))
 
 (setq doom-modeline-icon t)
 
